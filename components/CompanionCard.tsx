@@ -1,8 +1,12 @@
-// Import statements
+// ============================================================================
+// Imports
+// ============================================================================
 import Image from "next/image";
 import Link from "next/link";
 
-// Component interface
+// ============================================================================
+// Component Interface Definition
+// ============================================================================
 interface CompanionCardProps {
   id: string;
   name: string;
@@ -12,7 +16,9 @@ interface CompanionCardProps {
   color: string;
 }
 
-// Component definition
+// ============================================================================
+// CompanionCard Component
+// ============================================================================
 const CompanionCard = ({ id, name, topic, subject, duration, color }: CompanionCardProps) => {
   return <article className="companion-card" style={{backgroundColor:color}}>
     {/* Header section with subject and bookmark */}
