@@ -1,8 +1,32 @@
-import React from 'react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { subjects } from "@/constants"
 
 const SubjectFilter = () => {
   return (
-    <div>SubjectFilter</div>
+    <Select>
+     <SelectTrigger className="input capitalize">
+        <SelectValue placeholder="Subject" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">All subjects</SelectItem>
+        {subjects.map((subject) => (
+          <SelectItem
+          key={subject}
+            value={subject}
+            className="capitalize"
+          >
+            {subject}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+
   )
 }
 
