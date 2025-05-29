@@ -1,50 +1,41 @@
-import { Button } from "@/components/ui/button";
-import React from "react";
 import CompanionCard from "@/components/CompanionCard";
 import Cta from "@/components/CTA";
 import CompanionsList from "@/components/CompanionsList";
-import { recentSessions } from "@/constants";
+import { getSubjectColor } from "@/lib/utils";
+import { getRecentSessions } from "@/lib/actions/companion.actions";
+import { getAllCompanions } from "@/lib/actions/companion.actions";
 
-const Page = () => {
-  return (
-    <main>
-      <h1>Popular Companions</h1>
+
+const Page = async () => {
+  const companions = await getAllCompanions({ limit: 3 });
+  const recentSessionsCompanions = await getRecentSessions(10);
+
+return (
+  <main>
+    <h1>Popular Companions</h1>
+
       <section className="home-section">
-        <CompanionCard
-          id="123"
-          name="Neura the Brainy Exporer"
-          topic="Neutral Network of the Brain"
-          subject="Science"
-          duration={45}
-          color="#ffda6e"
-        />
-        <CompanionCard
-          id="456"
-          name="Neura the Brainy Exporer"
-          topic="Neutral Network of the Brain"
-          subject="Science"
-          duration={45}
-          color="#ffda6e"
-        />
-        <CompanionCard
-          id="789"
-          name="Neura the Brainy Exporer"
-          topic="Neutral Network of the Brain"
-          subject="Science"
-          duration={45}
-          color="#ffda6e"
-        />
+          {companions.map((companion) => (
+              <CompanionCard
+                  key={companion.id}
+                  {...companion}
+                  color={getSubjectColor(companion.subject)}
+              />
+          ))}
+
       </section>
+
       <section className="home-section">
-        <CompanionsList
-          title="Recently completed sessions"
-          companions={recentSessions}
-          classNames="w-2/3 max-lg:w-full"
-        />
-        <Cta />
+          <CompanionsList
+              title="Recently completed sessions"
+              companions={recentSessionsCompanions}
+              classNames="w-2/3 max-lg:w-full"
+          />
+          <Cta />
       </section>
-    </main>
-  );
-};
+  </main>
+)
+}
+
 
 export default Page;
