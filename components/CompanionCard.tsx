@@ -1,12 +1,10 @@
-// ============================================================================
-// Imports
-// ============================================================================
+"use client";
+import { removeBookmark } from "@/lib/actions/companion.actions";
+import { addBookmark } from "@/lib/actions/companion.actions";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-// ============================================================================
-// Component Interface Definition
-// ============================================================================
 interface CompanionCardProps {
   id: string;
   name: string;
@@ -14,48 +12,62 @@ interface CompanionCardProps {
   subject: string;
   duration: number;
   color: string;
+  bookmarked: boolean;
 }
 
-// ============================================================================
-// CompanionCard Component
-// ============================================================================
-const CompanionCard = ({ id, name, topic, subject, duration, color }: CompanionCardProps) => {
-  return <article className="companion-card" style={{backgroundColor:color}}>
-    {/* Header section with subject and bookmark */}
-    <div className="flex justify-between items-center">
-      <div className="subject-badge">{subject}</div>
-      <button className="companion-bookmark">
-      <Image
-            src="/icons/bookmark.svg"
+const CompanionCard = ({
+  id,
+  name,
+  topic,
+  subject,
+  duration,
+  color,
+  bookmarked,
+}: CompanionCardProps) => {
+  const pathname = usePathname();
+  const handleBookmark = async () => {
+    console.log("bookmarked:", bookmarked);
+    if (bookmarked) {
+      await removeBookmark(id, pathname);
+    } else {
+      await addBookmark(id, pathname);
+    }
+  };
+  return (
+    <article className="companion-card" style={{ backgroundColor: color }}>
+      <div className="flex justify-between items-center">
+        <div className="subject-badge">{subject}</div>
+        <button className="companion-bookmark" onClick={handleBookmark}>
+          <Image
+            src={
+              bookmarked ? "/icons/bookmark-filled.svg" : "/icons/bookmark.svg"
+            }
             alt="bookmark"
             width={12.5}
             height={15}
           />
-      </button>
-    </div>
+        </button>
+      </div>
 
-    {/* Content section */}
-    <h2 className="text-2xl font-bold">{name}</h2>
-    <p className="text-sm">{topic}</p>
+      <h2 className="text-2xl font-bold">{name}</h2>
+      <p className="text-sm">{topic}</p>
+      <div className="flex items-center gap-2">
+        <Image
+          src="/icons/clock.svg"
+          alt="duration"
+          width={13.5}
+          height={13.5}
+        />
+        <p className="text-sm">{duration} minutes</p>
+      </div>
 
-    {/* Duration display */}
-    <div className="flex items-center gap-2">
-      <Image
-        src="/icons/clock.svg"
-        alt="duration"
-        width={13.5}
-        height={13.5}
-      />
-      <p className="text-sm">{duration} minutes</p>
-    </div>
-
-    {/* Action button */}
-    <Link href={`/companions/${id}`} className="w-full">
+      <Link href={`/companions/${id}`} className="w-full">
         <button className="btn-primary w-full justify-center">
           Launch Lesson
         </button>
-    </Link>
-  </article>;
+      </Link>
+    </article>
+  );
 };
 
 export default CompanionCard;

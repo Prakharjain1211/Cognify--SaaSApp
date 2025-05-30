@@ -8,6 +8,7 @@ import { getAllCompanions } from "@/lib/actions/companion.actions";
 
 const Page = async () => {
   const companions = await getAllCompanions({ limit: 3 });
+  console.log("companions:", companions);
   const recentSessionsCompanions = await getRecentSessions(10);
 
 return (
